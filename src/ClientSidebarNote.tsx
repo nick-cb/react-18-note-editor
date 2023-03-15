@@ -19,7 +19,7 @@ const ClientSidebarNote = ({
   title: string | null;
   expandedChildren: React.ReactNode;
 }>) => {
-  // const router = useRouter();
+  const router = useRouter();
   const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
   const [isExpanded, setIsExpanded] = useState(false);
@@ -60,12 +60,7 @@ const ClientSidebarNote = ({
         }}
         onClick={() => {
           startTransition(() => {
-            // router.push(`/`)
-            // setLocation((loc) => ({
-            //   selectedId: id,
-            //   isEditing: false,
-            //   searchText: loc.searchText,
-            // }));
+            router.push(`/${id}`);
           });
         }}
       >
