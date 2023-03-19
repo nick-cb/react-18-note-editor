@@ -30,7 +30,7 @@ const SearchField = ({ searchText }: { searchText?: string }) => {
               return;
             }
             router.replace(`${pathname}?searchText=${newText}`);
-            router.refresh();
+            // router.refresh();
           });
         }}
       />
