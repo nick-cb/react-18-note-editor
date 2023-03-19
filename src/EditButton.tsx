@@ -3,7 +3,7 @@
 import { useRouter, usePathname } from "next/navigation";
 import React, { PropsWithChildren, useTransition } from "react";
 
-const EditButton: React.FC<PropsWithChildren<{ noteId: number }>> = ({
+const EditButton: React.FC<PropsWithChildren<{ noteId?: number }>> = ({
   noteId,
   children,
 }) => {
@@ -21,7 +21,11 @@ const EditButton: React.FC<PropsWithChildren<{ noteId: number }>> = ({
       disabled={isPending}
       onClick={() => {
         startTransition(() => {
-          router.push(`${pathname}/edit`);
+          if (noteId) {
+            router.push(`${pathname}/edit`);
+          } else {
+            router.push(`/new`);
+          }
           // setLocation((loc) => ({
           //   selectedId: noteId,
           //   isEditing: true,

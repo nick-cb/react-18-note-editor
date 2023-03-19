@@ -3,6 +3,7 @@ import SearchField from "@/SearchField";
 import { Suspense } from "react";
 import "./globals.css";
 import { headers } from "next/headers";
+import EditButton from "@/EditButton";
 
 export const metadata = {
   title: "Create Next App",
@@ -46,7 +47,7 @@ export default function RootLayout({
             </section>
             <section className="sidebar-menu" role="menubar">
               <SearchField searchText={searchText} />
-              {/* <EditButton noteId={null}>New</EditButton> */}
+              <EditButton>New</EditButton>
             </section>
             <nav>
               <Suspense fallback={<p>Loading...</p>}>

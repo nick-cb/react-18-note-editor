@@ -6,7 +6,7 @@ export async function PUT(request: NextRequest) {
   try {
     const response = await prisma.notes.update({
       where: { id: parseInt(id) },
-      data,
+      data: { ...data, updated_at: new Date() },
     });
     return new Response(JSON.stringify(response), {
       status: 200,

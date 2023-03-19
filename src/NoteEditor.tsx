@@ -8,13 +8,14 @@ import NotePreview from "./NotePreview";
 
 const NoteEditor = ({
   noteId,
-  initialTitle,
-  initialBody,
+  initialTitle = "",
+  initialBody = "",
 }: {
-  noteId: number;
-  initialTitle: string;
-  initialBody: string;
+  noteId: number | null;
+  initialTitle?: string;
+  initialBody?: string;
 }) => {
+  console.log("RUN");
   const router = useRouter();
   const [isSaving, setIsSaving] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -23,7 +24,7 @@ const NoteEditor = ({
   const [body, setBody] = useState(initialBody);
   const [isNavigating, startNavigating] = useTransition();
 
-  async function handleSave() {
+  async function handleUpdate() {
     const payload = { id: noteId, title, body };
     setIsSaving(true);
     fetch(`/api/notes/${noteId}`, {
@@ -33,6 +34,24 @@ const NoteEditor = ({
       .then(() => {
         startNavigating(() => {
           router.push(`/${noteId}`);
+        });
+      })
+      .finally(() => setIsSaving(false));
+  }
+
+  async function handleAdd() {
+    const payload = { title, body };
+    setIsSaving(true);
+    fetch(`/api/notes/`, {
+      method: "POST",
+      body: JSON.stringify(payload),
+    })
+      .then(async (response) => {
+        return await response.json();
+      })
+      .then((data) => {
+        startNavigating(() => {
+          router.push(`/${data.id}`);
         });
       })
       .finally(() => setIsSaving(false));
@@ -104,7 +123,7 @@ const NoteEditor = ({
           <button
             className="note-editor-done"
             disabled={isSaving || isNavigating}
-            onClick={() => handleSave()}
+            onClick={() => (noteId ? handleUpdate() : handleAdd())}
             role="menuitem"
           >
             <img
