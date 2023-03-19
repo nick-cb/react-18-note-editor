@@ -14,8 +14,13 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  /* Using headers() will automatically opt-out SSR */
   const headersList = headers();
-  // read the custom x-url header
+  /*
+   * Getting route info from x-url, which is provided by middleware
+   * Layout don't have access to searchParams because it won't
+   * be re-render on route changes
+   * */
   const header_url = headersList.get("x-url") || "";
   let searchText = "";
   if (header_url) {

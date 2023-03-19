@@ -23,6 +23,7 @@ const SearchField = ({ searchText }: { searchText?: string }) => {
           const newText = e.target.value;
           setText(newText);
           startSearching(() => {
+            // Refresh is necessary to force layout to re-render
             if (!newText) {
               router.replace(pathname);
               router.refresh();

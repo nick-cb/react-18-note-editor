@@ -1,13 +1,17 @@
 "use client";
 
+import { useRouter, usePathname } from "next/navigation";
 import React, { PropsWithChildren, useTransition } from "react";
 
 const EditButton: React.FC<PropsWithChildren<{ noteId: number }>> = ({
   noteId,
   children,
 }) => {
+  const router = useRouter();
+  const pathname = usePathname();
   const [isPending, startTransition] = useTransition();
   const isDraft = noteId == null;
+
   return (
     <button
       className={[
@@ -17,6 +21,7 @@ const EditButton: React.FC<PropsWithChildren<{ noteId: number }>> = ({
       disabled={isPending}
       onClick={() => {
         startTransition(() => {
+          router.push(`${pathname}/edit`);
           // setLocation((loc) => ({
           //   selectedId: noteId,
           //   isEditing: true,
