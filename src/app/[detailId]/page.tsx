@@ -9,6 +9,7 @@ const Detail = ({
 }) => {
   const selectedId = parseInt(params?.detailId?.toString());
 
+  /* @ts-expect-error Server Component */
   return <Note selectedId={selectedId} isEditing={false} />;
 };
 

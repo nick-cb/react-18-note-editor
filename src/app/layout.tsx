@@ -51,11 +51,14 @@ export default function RootLayout({
             </section>
             <nav>
               <Suspense fallback={<p>Loading...</p>}>
+                {/* @ts-expect-error Server Component */}
                 <NoteList searchText={searchText} />
               </Suspense>
             </nav>
           </section>
-          <section className="col note-viewer">{children}</section>
+          <section className="col note-viewer">
+            <Suspense fallback={<p>Loading...</p>}>{children}</Suspense>
+          </section>
         </main>
       </body>
     </html>
