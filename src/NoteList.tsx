@@ -13,6 +13,7 @@ async function NoteList({ searchText }: { searchText?: string }) {
       id: "desc",
     },
   });
+  console.log({notes, searchText});
 
   return notes.length > 0 ? (
     <ul className="notes-list">

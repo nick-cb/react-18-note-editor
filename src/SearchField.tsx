@@ -1,11 +1,12 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import React, { useState, useTransition } from "react";
 import Spinner from "./Spinner";
 
 const SearchField = ({ searchText }: { searchText?: string }) => {
   const router = useRouter();
+  const pathname = usePathname();
   const [text, setText] = useState(searchText);
   const [isSearching, startSearching] = useTransition();
 
@@ -23,14 +24,12 @@ const SearchField = ({ searchText }: { searchText?: string }) => {
           setText(newText);
           startSearching(() => {
             if (!newText) {
-              router.push("/");
+              router.replace(pathname);
+              router.refresh();
               return;
             }
-            router.push(`/?searchText=${newText}`);
-            // setLocation((loc) => ({
-            //   ...loc,
-            //   searchText: newText,
-            // }));
+            router.replace(`${pathname}?searchText=${newText}`);
+            router.refresh();
           });
         }}
       />

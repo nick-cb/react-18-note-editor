@@ -12,6 +12,9 @@ const Note = async ({
   selectedId: number;
   isEditing: boolean;
 }) => {
+  if (!selectedId) {
+    return null;
+  }
   const note = await prisma.notes.findFirst({ where: { id: selectedId } });
 
   if (note === null) {
