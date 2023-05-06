@@ -1,9 +1,9 @@
-import React from "react";
+import React, { cache } from "react";
 import prisma from "./db";
 import SidebarNote from "./SidebarNote";
 
-async function NoteList({ searchText }: { searchText?: string }) {
-  const notes = await prisma.notes.findMany({
+const getAllNotes = cache(async (searchText: string | undefined) => {
+  return await prisma.notes.findMany({
     where: {
       title: {
         contains: searchText,
@@ -13,7 +13,10 @@ async function NoteList({ searchText }: { searchText?: string }) {
       id: "desc",
     },
   });
-  console.log({notes, searchText});
+});
+
+async function NoteList({ searchText }: { searchText?: string }) {
+  const notes = await getAllNotes(searchText);
 
   return notes.length > 0 ? (
     <ul className="notes-list">

@@ -1,16 +1,19 @@
-import React from "react";
+import React, { cache } from "react";
 import prisma from "./db";
 import EditButton from "./EditButton";
 import { format } from "date-fns";
 import NotePreview from "./NotePreview";
+
+const getNote = cache(async (selectedId: number) => {
+  return await prisma.notes.findFirst({ where: { id: selectedId } });
+});
 
 // How do we memo server component?
 const Note = async ({ selectedId }: { selectedId: number }) => {
   if (!selectedId) {
     return null;
   }
-  const note = await prisma.notes.findFirst({ where: { id: selectedId } });
-  console.log({ note });
+  const note = await getNote(selectedId);
 
   if (note === null) {
     return (

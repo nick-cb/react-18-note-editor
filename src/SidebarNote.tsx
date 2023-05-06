@@ -1,4 +1,4 @@
-import React from "react";
+import React, { cache } from "react";
 // @ts-ignore
 import excerpts from "excerpts";
 import { format, isToday } from "date-fns";
@@ -6,7 +6,7 @@ import { notes } from "@prisma/client";
 import ClientSidebarNote from "./ClientSidebarNote";
 import { marked } from "marked";
 
-const SidebarNote = ({ note }: { note: notes }) => {
+const SidebarNote = cache(({ note }: { note: notes }) => {
   const updatedAt = new Date(note.updated_at);
   const lastUpdatedAt = isToday(updatedAt)
     ? format(updatedAt, "h:mm bb")
@@ -27,6 +27,6 @@ const SidebarNote = ({ note }: { note: notes }) => {
       </header>
     </ClientSidebarNote>
   );
-};
+});
 
 export default SidebarNote;
