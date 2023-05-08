@@ -2,9 +2,8 @@
 
 import { useRouter } from "next/navigation";
 import React, { useState, useTransition } from "react";
-// import { createFromReadableStream } from "react-server-dom-webpack";
-// import prisma from "./db";
 import NotePreview from "./NotePreview";
+import { updateNote } from "./app/[detailId]/edit/actions";
 
 const NoteEditor = ({
   noteId,
@@ -15,7 +14,6 @@ const NoteEditor = ({
   initialTitle?: string;
   initialBody?: string;
 }) => {
-  console.log("RUN");
   const router = useRouter();
   const [isSaving, setIsSaving] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -24,20 +22,20 @@ const NoteEditor = ({
   const [body, setBody] = useState(initialBody);
   const [isNavigating, startNavigating] = useTransition();
 
-  async function handleUpdate() {
-    const payload = { id: noteId, title, body };
-    setIsSaving(true);
-    fetch(`/api/notes/${noteId}`, {
-      method: "PUT",
-      body: JSON.stringify(payload),
-    })
-      .then(() => {
-        startNavigating(() => {
-          router.push(`/${noteId}`);
-        });
-      })
-      .finally(() => setIsSaving(false));
-  }
+  // async function handleUpdate() {
+  //   const payload = { id: noteId, title, body };
+  //   setIsSaving(true);
+  //   fetch(`/api/notes/${noteId}`, {
+  //     method: "PUT",
+  //     body: JSON.stringify(payload),
+  //   })
+  //     .then(() => {
+  //       startNavigating(() => {
+  //         router.push(`/${noteId}`);
+  //       });
+  //     })
+  //     .finally(() => setIsSaving(false));
+  // }
 
   async function handleAdd() {
     const payload = { title, body };
@@ -92,16 +90,24 @@ const NoteEditor = ({
   return (
     <div className="note-editor">
       <form
+        id="note-editor-form-id"
         className="note-editor-form"
         autoComplete="off"
-        onSubmit={(e) => e.preventDefault()}
+        action={updateNote}
       >
+        <input
+          value={noteId?.toString()}
+          name="id"
+          aria-hidden={true}
+          style={{ display: "none" }}
+        />
         <label className="offscreen" htmlFor="note-title-input">
           Enter a title for your note
         </label>
         <input
           id="note-title-input"
           type="text"
+          name="title"
           value={title}
           onChange={(e) => {
             setTitle(e.target.value);
@@ -113,6 +119,7 @@ const NoteEditor = ({
         <textarea
           id="note-body-input"
           value={body}
+          name="body"
           onChange={(e) => {
             setBody(e.target.value);
           }}
@@ -123,8 +130,9 @@ const NoteEditor = ({
           <button
             className="note-editor-done"
             disabled={isSaving || isNavigating}
-            onClick={() => (noteId ? handleUpdate() : handleAdd())}
             role="menuitem"
+            form="note-editor-form-id"
+            type="submit"
           >
             <img
               src="checkmark.svg"
